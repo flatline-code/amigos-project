@@ -1,141 +1,58 @@
-from command_project_classes import AddressBook, Record
+import re
 
-def input_error(handler):
-    def wrapper(*args):
-        try:
-            return handler(*args)
-        except Exception as e:
-            error_string = e.args[0] 
-            print(error_string) 
-            if 'add_address()' in error_string:
-                return 'enter name and address'
-            elif 'add_birthday()' in error_string:
-                return 'enter name and birthday'
-            elif 'add_email()' in error_string:
-                return 'enter name and email'
-            else:
-                return 'enter name and phone' 
-    return wrapper          
-            
 
-def stop():
-    return 'Good bye!'
+class Field:
+    def __init__(self, value):
+        self._value = None
+        self.value = value
 
-def greeting():
-    return 'How can I help you?'
+    @property
+    def value(self):
+        return self._value
 
-@input_error
-def add_contact(name, phone):
-    if address_book.data.get(name):
-        return 'contact already exist'
+    @value.setter
+    def value(self, value):
+        self._value = value
 
-    record = Record(name)
+    def __repr__(self):
+        return f"{self.__class__.__name__}(value={self.value})"
 
-    if not record.add_phone(phone):
-        return 'something wrong with phone number'
 
-    address_book.add_record(record)
-    return 'new contact added'
+class Name(Field):
+   pass
 
-@input_error
-def add_address(name, address):
-    if address_book.data.get(name):
-        record = address_book.data[name]
-        record.add_address(address)
-        return f'address "{address}" has been added to contact {name}'
-    else:
-        return 'contact does not exist'
 
-@input_error
-def add_phone(name, phone):
-    if address_book.data.get(name):
-        record = address_book.data[name]
+class Phone(Field):
+    def __init__(self, value):
+        super().__init__(value)
+        self.value = value
 
-        if not record.add_phone(phone):
-            return 'something wrong with phone number'
-        
-        return f'a new phone "{phone}" has been added to contact {name}' 
-    else:
-        return 'contact does not exist'
+    @Field.value.setter
+    def value(self, value):
+        self._value = self.check_phone(value)
 
-@input_error
-def add_email(name, email):
-    if address_book.data.get(name):
-        record = address_book.data[name]
+    @staticmethod
+    def check_phone(phone: str) -> str:
+        pattern = r"(^380|0|80)\d{9}$"
+        match = re.fullmatch(pattern, phone)
+        if not match:
+            raise ValueError("Invalid, please enter a valid phone number")
 
-        if not record.add_email(email):
-            return 'something wrong with email'
+        return phone
 
-        return f'a new email "{email}" has been added to contact {name}' 
-    else:
-        return 'contact does not exist'
 
-@input_error
-def add_birthday(name, birthday):
-    if address_book.data.get(name):
-        record = address_book.data[name]
+class Email(Field):
 
-        if not record.add_birthday(birthday):
-            return 'birthday format must be dd.mm.yyyy'
-            
-        return f'birthday {birthday} has been added to contact {name}'
-    else:
-        return 'contact does not exist' 
+    @Field.value.setter
+    def value(self, value: str):
+        self._value = self._check_email(value)
 
-def show_all():
-    if not address_book.data:
-        return 'nothing to show'
+    @staticmethod
+    def _check_email(_email: str) -> str:
+        format = r"[a-zA-Z]{1}[\w\.]+@[a-zA-Z]+\.[a-zA-Z]{2,}"
 
-    all_contacts = ''
-  
-    for name, record in address_book.items():
-        phones_list = []
-        for phone in record.phones:
-            phones_list.append(phone.value)
+        if not re.match(format, _email):
+            raise ValueError(f"Invalid email format: {_email}. Email format should be name@domain.com")
 
-        contact_info = f'{name} | phones: {phones_list} | '
-        if record.birthday:
-            contact_info += f'birthday: {record.birthday.value} | '
-        if record.address:
-            contact_info += f'address: {record.address.value} | '
-        if record.email:
-            contact_info += f'email: {record.email.value} | '
-        
-        all_contacts += f'{contact_info}\n'
-        
-    return all_contacts
-  
-def main():
-    commands = {
-        'hello': greeting,
-        'exit': stop,
-        'close': stop,
-        'add_contact': add_contact,
-        'add_address': add_address, 
-        'add_phone': add_phone,
-        'add_email': add_email,
-        'add_birthday': add_birthday,
-        'show_all': show_all,
-    }
-    
-    while True:
-        user_input = input('...').lower()
-        user_input_in_list = user_input.split(' ')
-        command = user_input_in_list[0]
-        user_inputs = user_input_in_list[1:]
-
-        if command in ['exit', 'close']:
-            print(stop())
-            break
-        
-        if commands.get(command):
-            result = commands[command](*user_inputs)
-            print(result)
-            continue
-        else:
-            print('unknown command')
-            continue
-
-if __name__ == '__main__':
-    address_book = AddressBook()
-    main()
+        # print('You entered the correct email')
+        return _email
