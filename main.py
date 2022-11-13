@@ -122,6 +122,5 @@ def main():
         if result == 'good bye':
             break
 
-
 if __name__ == '__main__':
     main()
