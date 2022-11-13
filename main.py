@@ -37,7 +37,7 @@ def greeting():
 
 @input_error
 def add_contact(name, phone):
-    if address_book.data.get(name):
+    if name in adress_book.data:
         return 'contact already exist'
 
     record = Record(name)
@@ -50,7 +50,7 @@ def add_contact(name, phone):
 
 @input_error
 def add_address(name, address):
-    if address_book.data.get(name):
+    if name in address_book.data:
         record = address_book.data[name]
         record.add_address(address)
         return f'address "{address}" has been added to contact {name}'
@@ -59,7 +59,7 @@ def add_address(name, address):
 
 @input_error
 def add_phone(name, phone):
-    if address_book.data.get(name):
+    if name in address_book.data:
         record = address_book.data[name]
 
         if not record.add_phone(phone):
@@ -71,7 +71,7 @@ def add_phone(name, phone):
 
 @input_error
 def add_email(name, email):
-    if address_book.data.get(name):
+    if name in address_book.data:
         record = address_book.data[name]
 
         if not record.add_email(email):
@@ -83,7 +83,7 @@ def add_email(name, email):
 
 @input_error
 def add_birthday(name, birthday):
-    if address_book.data.get(name):
+    if name in address_book.data:
         record = address_book.data[name]
 
         if not record.add_birthday(birthday):
