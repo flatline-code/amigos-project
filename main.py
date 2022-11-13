@@ -1,23 +1,19 @@
+from utils import input_error
 from classes import AddressBook, Record
 from commands import COMMANDS_DICT
 
-def input_error(handler):
-    def wrapper(*args):
-        try:
-            return handler(*args)
-        except Exception as e:
-            error_string = e.args[0] 
-            print(error_string) 
-            if 'add_address()' in error_string:
-                return 'enter name and address'
-            elif 'add_birthday()' in error_string:
-                return 'enter name and birthday'
-            elif 'add_email()' in error_string:
-                return 'enter name and email'
-            else:
-                return 'enter name and phone' 
-    return wrapper          
-            
+def change_input(user_input):
+    new_input = user_input
+    data = ''
+    for key in COMMANDS_DICT:
+        if user_input.strip().lower().startswith(key):
+            new_input = key
+            data = user_input[len(new_input):]
+            break
+    if data:
+        return reaction_func(new_input)(data)
+    return reaction_func(new_input)()
+
 def stop():
     return 'Good bye!'
 
@@ -104,7 +100,28 @@ def show_all():
         all_contacts += f'{contact_info}\n'
         
     return all_contacts
-  
+
+def reaction_func(reaction):
+    return COMMANDS_DICT.get(reaction, break_func)
+
+def main():
+    """
+    Основна логика усього застосунку. Отримуємо ввід від користувача
+    і відправляємо його в середину застосунку на обробку.
+    :return:
+    """
+    while True:
+        """
+            Просимо користувача ввести команду для нашого бота
+            Також тут же вимикаємо бота якщо було введено відповідну команду
+       """
+
+        user_input = input('Enter command for bot: ')
+        result = change_input(user_input)
+        print(result)
+        if result == 'good bye':
+            break
+
+
 if __name__ == '__main__':
-    address_book = AddressBook()
     main()
