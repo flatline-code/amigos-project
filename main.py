@@ -1,4 +1,4 @@
-from command_project_classes import AddressBook, Record
+from classes import AddressBook, Record
 
 def input_error(handler):
     def wrapper(*args):
