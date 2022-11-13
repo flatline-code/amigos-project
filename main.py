@@ -20,7 +20,7 @@ def reaction_func(reaction):
 
 @input_error
 def add_contact(name, phone):
-    if address_book.data(name):
+    if name in address_book.data:
         return 'contact already exist'
 
 def break_func():
