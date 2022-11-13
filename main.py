@@ -1,6 +1,5 @@
 from utils import input_error
 from classes import AddressBook, Record
-from commands import COMMANDS_DICT
 
 def change_input(user_input):
     new_input = user_input
@@ -8,10 +7,12 @@ def change_input(user_input):
     for key in COMMANDS_DICT:
         if user_input.strip().lower().startswith(key):
             new_input = key
-            data = user_input[len(new_input):]
+            data = user_input[len(new_input) + 1:]
             break
     if data:
-        return reaction_func(new_input)(data)
+        data = data.split(' ')
+        print(data)
+        return reaction_func(new_input)(*data)
     return reaction_func(new_input)()
 
 def stop():
@@ -22,14 +23,11 @@ def greeting():
 
 @input_error
 def add_contact(name, phone):
-    if name in adress_book.data:
+    if name in address_book.data:
         return 'contact already exist'
 
     record = Record(name)
-
-    if not record.add_phone(phone):
-        return 'something wrong with phone number'
-
+    record.add_phone(phone)
     address_book.add_record(record)
     return 'new contact added'
 
@@ -46,9 +44,7 @@ def add_address(name, address):
 def add_phone(name, phone):
     if name in address_book.data:
         record = address_book.data[name]
-
-        if not record.add_phone(phone):
-            return 'something wrong with phone number'
+        record.add_phone(phone)
         
         return f'a new phone "{phone}" has been added to contact {name}' 
     else:
@@ -58,9 +54,7 @@ def add_phone(name, phone):
 def add_email(name, email):
     if name in address_book.data:
         record = address_book.data[name]
-
-        if not record.add_email(email):
-            return 'something wrong with email'
+        record.add_email(email)
 
         return f'a new email "{email}" has been added to contact {name}' 
     else:
@@ -70,10 +64,7 @@ def add_email(name, email):
 def add_birthday(name, birthday):
     if name in address_book.data:
         record = address_book.data[name]
-
-        if not record.add_birthday(birthday):
-            return 'birthday format must be dd.mm.yyyy'
-            
+        record.add_birthday(birthday)         
         return f'birthday {birthday} has been added to contact {name}'
     else:
         return 'contact does not exist' 
@@ -104,6 +95,25 @@ def show_all():
 def reaction_func(reaction):
     return COMMANDS_DICT.get(reaction, break_func)
 
+def break_func():
+    """
+    Якщо користувач ввів якусь тарабарщину- повертаємо відповідну відповідь
+    :return: Неправильна команда
+    """
+    return 'Wrong enter.'
+
+COMMANDS_DICT = {
+        'hello': greeting,
+        'exit': stop,
+        'close': stop,
+        'add_contact': add_contact,
+        'add_address': add_address, 
+        'add_phone': add_phone,
+        'add_email': add_email,
+        'add_birthday': add_birthday,
+        'show_all': show_all,
+}
+
 def main():
     """
     Основна логика усього застосунку. Отримуємо ввід від користувача
@@ -123,4 +133,5 @@ def main():
             break
 
 if __name__ == '__main__':
+    address_book = AddressBook()
     main()

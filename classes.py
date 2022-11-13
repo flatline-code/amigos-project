@@ -19,24 +19,30 @@ class Field:
         return f"{self.__class__.__name__}(value={self.value})"
 
 class Address(Field):
-    pass
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        self._value = value
     
 class Birthday(Field):
     def __init__(self, value):
-        self.__value = None
+        self._value = None
         self.value = value
 
     @property
     def value(self):
-        return self.__value
+        return self._value
 
     @value.setter
     def value(self, value):
         try:
            if datetime.strptime(value, '%d.%m.%Y'):
-              self.__value = value
-        except:
-            self.__value = None
+              self._value = value
+        except (ValueError, TypeError):
+            self._value = None
 
 class Name(Field):
    pass
@@ -71,7 +77,6 @@ class Email(Field):
         if not re.match(format, _email):
             raise ValueError(f"Invalid email format: {_email}. Email format should be name@domain.com")
 
-        # print('You entered the correct email')
         return _email
 
 class Record:
@@ -83,28 +88,16 @@ class Record:
         self.birthday = None
 
     def add_address(self, address):
-        user_address = Address(address)
-        if user_address.value:
-            self.address = Address(address)
-            return True
-
+        self.address = Address(address)
+    
     def add_phone(self, phone):
-        user_phone = Phone(phone)
-        if user_phone.value:
-            self.phones.append(Phone(phone))
-            return True
+        self.phones.append(Phone(phone))
 
     def add_email(self, email):
-        user_email = Email(email)
-        if user_email.value:
-            self.email = Email(email)
-            return True
+        self.email = Email(email)
 
     def add_birthday(self, birthday):
-        user_birthday = Birthday(birthday)
-        if user_birthday.value:
-            self.birthday = Birthday(birthday)
-            return True
+        self.birthday = Birthday(birthday)
 
 class AddressBook(UserDict):
     def add_record(self, record):
