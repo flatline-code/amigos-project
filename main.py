@@ -1,58 +1,53 @@
-import re
+COMMANDS_DICT = {} # TODO add commands
 
 
-class Field:
-    def __init__(self, value):
-        self._value = None
-        self.value = value
-
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, value):
-        self._value = value
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}(value={self.value})"
+def change_input(user_input):
+    new_input = user_input
+    data = ''
+    for key in COMMANDS_DICT:
+        if user_input.strip().lower().startswith(key):
+            new_input = key
+            data = user_input[len(new_input):]
+            break
+    if data:
+        return reaction_func(new_input)(data)
+    return reaction_func(new_input)()
 
 
-class Name(Field):
-   pass
+def reaction_func(reaction):
+    return COMMANDS_DICT.get(reaction, break_func)
+
+@input_error
+def add_contact(name, phone):
+    if address_book.data.get(name):
+        return 'contact already exist'
+
+def break_func():
+    """
+    Якщо користувач ввів якусь тарабарщину- повертаємо відповідну відповідь
+    :return: Неправильна команда
+    """
+    return 'Wrong enter.'
 
 
-class Phone(Field):
-    def __init__(self, value):
-        super().__init__(value)
-        self.value = value
+def main():
+    """
+    Основна логика усього застосунку. Отримуємо ввід від користувача
+    і відправляємо його в середину застосунку на обробку.
+    :return:
+    """
+    while True:
+        """
+            Просимо користувача ввести команду для нашого бота
+            Також тут же вимикаємо бота якщо було введено відповідну команду
+       """
 
-    @Field.value.setter
-    def value(self, value):
-        self._value = self.check_phone(value)
-
-    @staticmethod
-    def check_phone(phone: str) -> str:
-        pattern = r"(^380|0|80)\d{9}$"
-        match = re.fullmatch(pattern, phone)
-        if not match:
-            raise ValueError("Invalid, please enter a valid phone number")
-
-        return phone
+        user_input = input('Enter command for bot: ')
+        result = change_input(user_input)
+        print(result)
+        if result == 'good bye':
+            break
 
 
-class Email(Field):
-
-    @Field.value.setter
-    def value(self, value: str):
-        self._value = self._check_email(value)
-
-    @staticmethod
-    def _check_email(_email: str) -> str:
-        format = r"[a-zA-Z]{1}[\w\.]+@[a-zA-Z]+\.[a-zA-Z]{2,}"
-
-        if not re.match(format, _email):
-            raise ValueError(f"Invalid email format: {_email}. Email format should be name@domain.com")
-
-        # print('You entered the correct email')
-        return _email
+if __name__ == '__main__':
+    main()
