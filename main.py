@@ -23,6 +23,7 @@ def add_contact(name, phone):
     if name in address_book.data:
         return 'contact already exist'
 
+
 def break_func():
     """
     Якщо користувач ввів якусь тарабарщину- повертаємо відповідну відповідь
