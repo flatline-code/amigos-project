@@ -1,5 +1,6 @@
 import re
-
+from collections import UserDict
+from datetime import datetime
 
 class Field:
     def __init__(self, value):
@@ -17,6 +18,31 @@ class Field:
     def __repr__(self):
         return f"{self.__class__.__name__}(value={self.value})"
 
+class Address(Field):
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        self._value = value
+    
+class Birthday(Field):
+    def __init__(self, value):
+        self._value = None
+        self.value = value
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        try:
+           if datetime.strptime(value, '%d.%m.%Y'):
+              self._value = value
+        except (ValueError, TypeError):
+            self._value = None
 
 class Name(Field):
    pass
@@ -51,5 +77,28 @@ class Email(Field):
         if not re.match(format, _email):
             raise ValueError(f"Invalid email format: {_email}. Email format should be name@domain.com")
 
-        # print('You entered the correct email')
         return _email
+
+class Record:
+    def __init__(self, name):
+        self.name = Name(name)
+        self.address = None
+        self.phones = []
+        self.email = None
+        self.birthday = None
+
+    def add_address(self, address):
+        self.address = Address(address)
+    
+    def add_phone(self, phone):
+        self.phones.append(Phone(phone))
+
+    def add_email(self, email):
+        self.email = Email(email)
+
+    def add_birthday(self, birthday):
+        self.birthday = Birthday(birthday)
+
+class AddressBook(UserDict):
+    def add_record(self, record):
+        self.data[record.name.value] = record    
