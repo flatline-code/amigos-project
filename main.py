@@ -1,3 +1,4 @@
+from utils import input_error
 COMMANDS_DICT = {} # TODO add commands
 
 
@@ -19,7 +20,7 @@ def reaction_func(reaction):
 
 @input_error
 def add_contact(name, phone):
-    if address_book.data.get(name):
+    if address_book.data(name):
         return 'contact already exist'
 
 def break_func():
