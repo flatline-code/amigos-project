@@ -1,5 +1,17 @@
 from classes import AddressBook, Record
 
+COMMANDS_DICT = {
+        'hello': greeting,
+        'exit': stop,
+        'close': stop,
+        'add_contact': add_contact,
+        'add_address': add_address, 
+        'add_phone': add_phone,
+        'add_email': add_email,
+        'add_birthday': add_birthday,
+        'show_all': show_all,
+    }
+
 def input_error(handler):
     def wrapper(*args):
         try:
@@ -17,7 +29,6 @@ def input_error(handler):
                 return 'enter name and phone' 
     return wrapper          
             
-
 def stop():
     return 'Good bye!'
 
@@ -105,37 +116,6 @@ def show_all():
         
     return all_contacts
   
-def main():
-    commands = {
-        'hello': greeting,
-        'exit': stop,
-        'close': stop,
-        'add_contact': add_contact,
-        'add_address': add_address, 
-        'add_phone': add_phone,
-        'add_email': add_email,
-        'add_birthday': add_birthday,
-        'show_all': show_all,
-    }
-    
-    while True:
-        user_input = input('...').lower()
-        user_input_in_list = user_input.split(' ')
-        command = user_input_in_list[0]
-        user_inputs = user_input_in_list[1:]
-
-        if command in ['exit', 'close']:
-            print(stop())
-            break
-        
-        if commands.get(command):
-            result = commands[command](*user_inputs)
-            print(result)
-            continue
-        else:
-            print('unknown command')
-            continue
-
 if __name__ == '__main__':
     address_book = AddressBook()
     main()

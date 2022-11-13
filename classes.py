@@ -1,21 +1,8 @@
 from collections import UserDict
 from datetime import datetime
 
-class Field:
-    def __init__(self, value):
-        self.value = value
-
-class Name(Field):
-    pass
-
 class Address(Field):
     pass
-
-class Phone(Field):
-    pass
-
-class Email(Field):
-    pass 
     
 class Birthday(Field):
     def __init__(self, value):
