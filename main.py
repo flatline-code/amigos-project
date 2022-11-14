@@ -1,5 +1,5 @@
 from utils import input_error
-from classes import AddressBook, Record
+from classes import AddressBook, Record, Notes, Note
 
 def change_input(user_input):
     new_input = user_input
@@ -92,6 +92,30 @@ def show_all():
         
     return all_contacts
 
+@input_error
+def add_note(*args):
+    title = ' '.join(args)
+    if title in notes.data:
+        return 'note with this name already exist'
+
+    note = Note(title)
+    note.text = input('Enter note text: ')
+    notes.add_note(note)
+    return 'new note added'
+    
+def show_notes():
+    if not notes.data:
+        return 'nothing to show'
+    
+    all_notes = '-------------------\n'
+
+    for title, note in notes.items():
+        all_notes += f'title: {title}\n'
+        all_notes += f'text: {note.text}\n'
+        all_notes += '-------------------\n'
+
+    return all_notes
+
 def reaction_func(reaction):
     return COMMANDS_DICT.get(reaction, break_func)
 
@@ -103,15 +127,18 @@ def break_func():
     return 'Wrong enter.'
 
 COMMANDS_DICT = {
-        'hello': greeting,
-        'exit': stop,
-        'close': stop,
-        'add_contact': add_contact,
-        'add_address': add_address, 
-        'add_phone': add_phone,
-        'add_email': add_email,
-        'add_birthday': add_birthday,
-        'show_all': show_all,
+    'hello': greeting,
+    'exit': stop,
+    'close': stop,
+    'add_contact': add_contact,
+    'add_address': add_address, 
+    'add_phone': add_phone,
+    'add_email': add_email,
+    'add_birthday': add_birthday,
+    'show_all': show_all,
+    'add_note': add_note,
+    'show_notes': show_notes,
+    'find_notes': find_notes,
 }
 
 def main():
@@ -134,4 +161,5 @@ def main():
 
 if __name__ == '__main__':
     address_book = AddressBook()
+    notes = Notes()
     main()

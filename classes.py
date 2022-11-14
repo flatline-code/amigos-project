@@ -101,4 +101,14 @@ class Record:
 
 class AddressBook(UserDict):
     def add_record(self, record):
-        self.data[record.name.value] = record    
+        self.data[record.name.value] = record
+
+class Note:
+    def __init__(self, *args):
+        self.title = ' '.join(args)
+        self.text = ''
+        self.tags = []
+
+class Notes(UserDict):
+    def add_note(self, note):
+        self.data[note.title] = note
