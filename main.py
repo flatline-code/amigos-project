@@ -116,6 +116,20 @@ def show_notes():
 
     return all_notes
 
+def find_notes(words):
+    if not notes.data:
+        return 'nothing to show'
+
+    finded_notes = '-------------------\n'
+
+    for title, note in notes.items():
+        if words in title or words in note.text:
+            finded_notes += f'title: {title}\n'
+            finded_notes += f'text: {note.text}\n'
+            finded_notes += '-------------------\n'
+
+    return finded_notes
+
 def reaction_func(reaction):
     return COMMANDS_DICT.get(reaction, break_func)
 
