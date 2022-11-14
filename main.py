@@ -1,5 +1,6 @@
 from utils import input_error
 from classes import AddressBook, Record, Notes, Note
+from sort_files import sort_files
 
 def change_input(user_input):
     new_input = user_input
@@ -153,6 +154,9 @@ COMMANDS_DICT = {
     'add_note': add_note,
     'show_notes': show_notes,
     'find_notes': find_notes,
+    'sort_files': sort_files,
+    # 'change_note': change_note,
+    # 'delete_note': delete_note,
 }
 
 def main():
