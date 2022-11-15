@@ -97,7 +97,7 @@ def show_all():
 def add_note(title, *args):
     if args:
         title = f"{title} {' '.join(args)}"
-    
+
     if title in notes.data:
         return 'note with this name already exist'
 
@@ -107,11 +107,11 @@ def add_note(title, *args):
 
     if note_tags:
         note_tags = note_tags.split(' ')
-    
+
     note.tags = note_tags
     notes.add_note(note)
     return 'new note added'
-    
+
 def show_notes():
     if not notes.data:
         return 'nothing to show'
@@ -129,6 +129,7 @@ def show_notes():
 
     return all_notes
 
+@input_error
 def find_notes(words):
     if not notes.data:
         return 'nothing to show'
@@ -143,6 +144,28 @@ def find_notes(words):
             finded_notes += '-------------------\n'
 
     return finded_notes
+
+@input_error
+def change_note(title):
+    if title in notes.data:
+        note = notes.data[title]
+        result = note.change_note(title)
+        notes.add_note(note)
+
+        if result == 'note title changed':
+            delete_note(title)
+
+        return result
+    else:
+        return 'note does not exist'
+
+@input_error
+def delete_note(title):
+    if title in notes.data:
+        del notes[title]
+        return 'note deleted'
+    else:
+        return 'note does not exist'
 
 def reaction_func(reaction):
     return COMMANDS_DICT.get(reaction, break_func)

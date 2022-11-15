@@ -109,6 +109,22 @@ class Note:
         self.text = ''
         self.tags = []
 
+    def change_note(self, title):
+        field_for_change = input('enter what do you want to change, title or text of note: ')
+        if field_for_change == 'title':
+            new_title = input('enter new title: ')
+            
+            if self.title == new_title:
+                return 'new title must be different, try again'
+            
+            self.title = new_title
+            return 'note title changed'
+        elif field_for_change == 'text':
+            self.text = input('enter new text: ')
+            return 'note text changed'
+        else:
+            return 'please, type "title" or "text" to add changes to note'
+
 class Notes(UserDict):
     def add_note(self, note):
         self.data[note.title] = note
