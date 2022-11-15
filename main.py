@@ -152,7 +152,7 @@ def find_notes(words):
         if words in title or words in note.text:
             finded_notes += f'title: {title}\n'
             finded_notes += f'text: {note.text}\n'
-            finded_notes += f'text: {note.tags}\n'
+            finded_notes += f'tags: {note.tags}\n'
             finded_notes += '-------------------\n'
 
     return finded_notes
@@ -172,6 +172,27 @@ def change_note(title):
     else:
         return 'note does not exist'
 
+@input_error
+def find_tag(tag):
+    if not notes.data:
+        return 'nothing to show'
+
+    finded_notes = '-------------------\n'
+    notes_titles = []
+
+    for title, note in notes.items():
+        if tag in note.tags:
+            notes_titles.append(note.title)
+
+    notes_titles.sort()
+    
+    for title in notes_titles:
+        finded_notes += f'title: {title}\n'
+        finded_notes += f'text: {notes[title].text}\n'
+        finded_notes += f'text: {notes[title].tags}\n'
+        finded_notes += '-------------------\n'
+    
+    return finded_notes
 
 @input_error
 def delete_note(title):
@@ -210,6 +231,7 @@ COMMANDS_DICT = {
     'sort_files': sort_files,
     'change_note': change_note,
     'delete_note': delete_note,
+    'find_tag': find_tag,
 }
 
 
@@ -228,7 +250,7 @@ def main():
         user_input = input('Enter command for bot: ')
         result = change_input(user_input)
         print(result)
-        if result == 'good bye':
+        if result == 'Good bye!':
             break
 
 
