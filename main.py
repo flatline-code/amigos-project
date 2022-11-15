@@ -94,13 +94,21 @@ def show_all():
     return all_contacts
 
 @input_error
-def add_note(*args):
-    title = ' '.join(args)
+def add_note(title, *args):
+    if args:
+        title = f"{title} {' '.join(args)}"
+    
     if title in notes.data:
         return 'note with this name already exist'
 
     note = Note(title)
     note.text = input('Enter note text: ')
+    note_tags = input('you can add tags here: ')
+
+    if note_tags:
+        note_tags = note_tags.split(' ')
+    
+    note.tags = note_tags
     notes.add_note(note)
     return 'new note added'
     
@@ -113,6 +121,10 @@ def show_notes():
     for title, note in notes.items():
         all_notes += f'title: {title}\n'
         all_notes += f'text: {note.text}\n'
+
+        if note.tags:
+            all_notes += f'tags: {note.tags}\n'
+
         all_notes += '-------------------\n'
 
     return all_notes
@@ -127,6 +139,7 @@ def find_notes(words):
         if words in title or words in note.text:
             finded_notes += f'title: {title}\n'
             finded_notes += f'text: {note.text}\n'
+            finded_notes += f'text: {note.tags}\n'
             finded_notes += '-------------------\n'
 
     return finded_notes
@@ -155,8 +168,8 @@ COMMANDS_DICT = {
     'show_notes': show_notes,
     'find_notes': find_notes,
     'sort_files': sort_files,
-    # 'change_note': change_note,
-    # 'delete_note': delete_note,
+    'change_note': change_note,
+    'delete_note': delete_note,
 }
 
 def main():
