@@ -1,9 +1,9 @@
 import os
-import sys
 import zipfile
 
-def sort_files(original_path):
-    original_path = os.path.join(original_path)
+
+def sort_files(path: str) -> str:
+    original_path = os.path.join(path)
     all_folders = {
       'images': ['jpeg', 'png', 'jpg', 'svg'],
       'documents': ['doc', 'docx', 'txt', 'pdf', 'xlsx', 'pptx'],
@@ -70,4 +70,4 @@ def sort_files(original_path):
             archive = zipfile.ZipFile(new_file_path)
             archive.extractall(unzip_folder_path)
 
-    return 'files sorted'   
+    return 'files sorted'

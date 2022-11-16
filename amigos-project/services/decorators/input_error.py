@@ -16,8 +16,8 @@ def input_error(function):
         except IndexError:
             return 'Pls print: name and number'
         except TypeError as e:
-            error_string = e.args[0] 
-            print(error_string) 
+            error_string = e.args[0]
+            print(error_string)
             return 'Wrong command.'
 
     return wrapper
