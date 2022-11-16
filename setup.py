@@ -10,5 +10,5 @@ setup(
       author_email='info@amigos.com',
       license='MIT',
       packages=find_namespace_packages(),
-      entry_points={'console_scripts': ['bot-assistant = bot_assistant.main:main']}
+      entry_points={'console_scripts': ['bot-assistant = amigos_project:main']}
       )
