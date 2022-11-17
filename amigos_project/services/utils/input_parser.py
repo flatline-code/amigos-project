@@ -13,12 +13,15 @@ def change_input(user_input):
 
     for command in COMMANDS_DICT.keys():
         if user_input.strip().lower().startswith(command):
-            new_input = command
-            data = user_input[len(new_input) + 1:]
+            if command == 'hello':
+                data = COMMANDS_DICT.keys()
+            else:
+                new_input = command
+                data = user_input[len(new_input) + 1:]
             break
 
     if data:
-        data = data.split(' ')
-        return reaction_func(new_input)(*data)
+        args = data.split(' ') if isinstance(data, str) else [data]
+        return reaction_func(new_input)(*args)
 
     return reaction_func(new_input)()

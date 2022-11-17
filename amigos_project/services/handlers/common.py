@@ -5,8 +5,8 @@ def stop():
     return 'Good bye!'
 
 
-def greeting():
-    return 'How can I help you?'
+def greeting(commands):
+    return f'How can I help you? This is list of commands {list(commands)}'
 
 
 def handler_sort_files(path: str) -> str:
