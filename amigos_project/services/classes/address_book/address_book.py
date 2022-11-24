@@ -4,8 +4,24 @@ import os
 
 from .record import Record
 
+from abc import ABC, abstractmethod
 
-class AddressBook(UserDict):
+
+class AddressBookABC(ABC):
+    @abstractmethod
+    def add_record(self, record):
+        pass
+
+    @abstractmethod
+    def search_contacts(self, value):
+        pass
+
+    @abstractmethod
+    def save_to_file(self):
+        pass
+
+
+class AddressBook(AddressBookABC, UserDict):
     def add_record(self, record: Record):
         self.data[record.name.value] = record
 
