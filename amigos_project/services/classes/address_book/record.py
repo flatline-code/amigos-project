@@ -4,49 +4,8 @@ from .address import Address
 from .phone import Phone
 from .birthday import Birthday
 
-from abc import ABC, abstractmethod
 
-
-# Made the __init__ an abstract method:
-class RecordABC(ABC):
-    @abstractmethod
-    def __init__(self, *args):
-        ...
-
-    @abstractmethod
-    def add_address(self, address):
-        pass
-
-    @abstractmethod
-    def add_phone(self, phone):
-        pass
-
-    @abstractmethod
-    def add_email(self, email):
-        pass
-
-    @abstractmethod
-    def add_birthday(self, birthday):
-        pass
-
-    @abstractmethod
-    def update_phone(self, *args):
-        pass
-
-    @abstractmethod
-    def delete_phone(self, phone):
-        pass
-
-    @abstractmethod
-    def update_address(self, address):
-        pass
-
-    @abstractmethod
-    def format_contact(self):
-        pass
-
-
-class Record(RecordABC):
+class Record:
     def __init__(self,
                  name: str,
                  address: str = None,
@@ -99,3 +58,4 @@ class Record(RecordABC):
         return (
             f"Record(name={self.name!r}, address={self.address!r}, phones={self.phones!r}, birthday={self.birthday!r})"
         )
+    
